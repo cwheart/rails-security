@@ -1,6 +1,6 @@
 module RailsSecurity
   module Xss
-    SAFE_TAGS = %w(span div p font)
+    SAFE_TAGS = %w(span div p font em strong br ol ul a img)
     TAG_BEG = "[rs:beg]"
     TAG_END = "[rs:end]"
     
@@ -26,7 +26,9 @@ module RailsSecurity
         str.gsub(/\[rs:beg\]/, "<").gsub(/\[rs:end\]/, ">")
       end
       def instance_safe_reg
-        Regexp.compile("<(\/?(?:#{SAFE_TAGS.join('|')})(?:\\s+[a-z0-9\\s_=\\-\\'"+'\"'+"\\s;\\:#]+)?)>")
+        Regexp.compile("<(\/?(?:#{SAFE_TAGS.join('|')})(?:\\s+[a-z0-9\\s_=\\-\\'"+'\"'+"\\s;\\:#\\/]+)?)>")
+        # Regexp.compile("<(\/?(?:#{SAFE_TAGS.join('|')})(\\s+[\\w\\d\\-_]+(=[\'\"\d\w]+)?)+\s?)")
+        # "<span required>".gsub(/<(\/?span(\s+[\w\d\-_]+(=[\'\"\d\w]+)?)+\s?)>/, "\\1")
       end
     end
   end
